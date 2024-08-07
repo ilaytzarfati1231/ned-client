@@ -1,0 +1,138 @@
+.app-container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  height: 75px;
+  width: auto;
+}
+
+.main-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.input-section {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  width: 45%;
+  position: relative; /* Ensure relative positioning */
+}
+
+.input-field {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.button {
+  padding: 8px 12px; /* smaller size */
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.automata-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.form-label {
+  width: 100px;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.graph-section {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.footer {
+  text-align: center;
+  padding: 10px 0;
+  margin-top: auto;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.modal {
+  position: absolute;
+  top: 150%; /* Center vertically */
+  left: calc(95% ); /* Position from the right of the button */
+  transform: translate(-100%, -50%); /* Move left */
+  width: 300px; /* Adjust the width as needed */
+  max-width: calc(100vw - 40px); /* Ensure it doesn't overflow */
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  padding: 10px;
+  z-index: 1000;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #aaa;
+}
+
+.close:hover {
+  color: #000;
+}
+
+.container {
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+}
