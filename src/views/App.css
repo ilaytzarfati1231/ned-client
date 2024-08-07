@@ -1,3 +1,4 @@
+/* General App Styles */
 .app-container {
   padding: 10px;
   display: flex;
@@ -30,7 +31,7 @@
 .input-section {
   display: flex;
   flex-direction: column;
-  width: 45%;
+  width: 25%;
 }
 
 .button-container {
@@ -94,6 +95,149 @@
   color: #fff;
   font-weight: bold;
   border-radius: 4px;
+}
+.weight-page {
+  padding: 20px;
+}
+
+.back-button {
+  display: block;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.back-button:hover {
+  background-color: #5a6268;
+}
+.weight-page {
+  padding: 20px;
+}
+
+.back-button {
+  display: block;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.back-button:hover {
+  background-color: #5a6268;
+}
+
+.weight-page-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.weight-page-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.weight-form-group {
+  margin-bottom: 20px;
+}
+
+.weight-form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.weight-input-field {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.weight-values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.weight-value-input {
+  display: flex;
+  flex-direction: column;
+}
+
+.weight-input-box {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.weight-save-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.weight-save-button:hover {
+  background-color: #0056b3;
+}
+.error {
+  border: 1px solid red;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.8em;
+}
+.menu {
+  position: absolute; /* Adjust if needed */
+  border: 1px solid #ccc;
+  background-color: #fff;
+  max-height: 150px; /* Adjust based on desired height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  width: 200px; /* Adjust based on desired width */
+}
+
+.menu-filter {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+}
+
+.menu-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: #f0f0f0;
 }
 
 .modal {

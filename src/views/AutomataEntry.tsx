@@ -8,6 +8,7 @@ interface AutomataEntryProps {
   deleteAutomata: (index: number) => void;
   isSelected: boolean;
   setIsSelected: (value: boolean) => void;
+  weightFunctions: string[];
 }
 
 export const AutomataEntry: React.FC<AutomataEntryProps> = ({
@@ -16,6 +17,7 @@ export const AutomataEntry: React.FC<AutomataEntryProps> = ({
   deleteAutomata,
   isSelected,
   setIsSelected,
+  weightFunctions,
 }) => {
   const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,7 +28,10 @@ export const AutomataEntry: React.FC<AutomataEntryProps> = ({
   const [sumInfInfWords, setSumInfInfWords] = useState<string[] | null>(null);
   const [InfInfWords, setInfInfWords] = useState<string[] | null>(null);
   const [omegaWords, setOmegaWords] = useState<string[] | null>(null);
-
+  const [weightFunctionIndex, setWeightFunctionIndex] = useState<number | null>(null);
+  const [filter, setFilter] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   
   const viewAutomata = async () => {
     setLoading(true);
@@ -50,7 +55,16 @@ export const AutomataEntry: React.FC<AutomataEntryProps> = ({
       setLoading(false);
     }
   };
-  
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  const handleOptionClick = (option: string) => {
+    console.log(option);
+    setSelectedOption(option);
+    setWeightFunctionIndex(weightFunctions.indexOf(option)); // Set the selected option index
+    setFilter(option); // Optionally set the filter to the selected option
+    setIsOpen(false);  // Close the menu after selection
+  };
+
   const handleCheckboxChange = () => {
     setShowImage((oldValue) => {
       const newValue = !oldValue;
@@ -83,13 +97,16 @@ export const AutomataEntry: React.FC<AutomataEntryProps> = ({
     detailsWindow.document.write(`<p>Transitions: ${JSON.stringify(automata.Delta)}</p>`);
     detailsWindow.document.write(`<p>Start State: ${automata.q0}</p>`);
     detailsWindow.document.write(`<p>Final States: ${automata.F.join(", ")}</p>`);
-    detailsWindow.document.write(`<p>ωNED: ${omega_value} </p>`);
-    detailsWindow.document.write(`<p>MEAN: ${infInfValue}</p>`);
-    detailsWindow.document.write(`<p>SUM: ${sumInfInfValue}</p>`);
-    console.log(omegaWords);
-    detailsWindow.document.write(`<p>ωNED Words: ${omegaWords}</p>`);
-    detailsWindow.document.write(`<p>MEAN Words: ${InfInfWords}</p>`);
-    detailsWindow.document.write(`<p>SUM Words: ${sumInfInfWords}</p>`);
+    if (automata.name.includes("omega") && automata.name.includes("is edit")) {
+      detailsWindow.document.write(`<p>ωNED: ${omega_value} </p>`);
+      console.log(omegaWords);
+    }
+    else if (!automata.name.includes("omega") && automata.name.includes("is edit")) {
+      detailsWindow.document.write(`<p>MEAN: ${infInfValue}</p>`);
+      detailsWindow.document.write(`<p>SUM: ${sumInfInfValue}</p>`);
+      detailsWindow.document.write(`<p>MEAN Words: ${InfInfWords}</p>`); 
+      detailsWindow.document.write(`<p>SUM Words: ${sumInfInfWords}</p>`); 
+    }
     if (image && automata.Q.length <= 100) {
       detailsWindow.document.write(`<img src="${image}" alt="Automata ${index}" style="max-width: 100%; max-height: 100px; margin-top: 10px;">`);
     }
@@ -103,7 +120,11 @@ export const AutomataEntry: React.FC<AutomataEntryProps> = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ regex_string: automata.regex_string,name: automata.name,Q: automata.Q,Sigma: automata.Sigma,Delta: automata.Delta,q0: automata.q0,F: automata.F}),
+        body: JSON.stringify({
+          regex_string: automata.regex_string, name: automata.name, Q: automata.Q, Sigma: automata.Sigma,
+          Delta: automata.Delta, q0: automata.q0, F: automata.F,
+          weightFunction: weightFunctionIndex ? weightFunctionIndex : 0
+        }),
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -123,13 +144,18 @@ export const AutomataEntry: React.FC<AutomataEntryProps> = ({
   };
   const Inf_Inf = async () => {
     setLoading(true);
+    console.log(weightFunctionIndex);
     try {
       const response = await fetch(`${API_URL}/Inf_Inf`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ regex_string: automata.regex_string,name: automata.name,Q: automata.Q,Sigma: automata.Sigma,Delta: automata.Delta,q0: automata.q0,F: automata.F}),
+        body: JSON.stringify({
+          regex_string: automata.regex_string, name: automata.name, Q: automata.Q, Sigma: automata.Sigma,
+          Delta: automata.Delta, q0: automata.q0, F: automata.F,
+          weightFunction: weightFunctionIndex ? weightFunctionIndex : 0
+        }),
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -152,7 +178,11 @@ export const AutomataEntry: React.FC<AutomataEntryProps> = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ regex_string: automata.regex_string,name: automata.name,Q: automata.Q,Sigma: automata.Sigma,Delta: automata.Delta,q0: automata.q0,F: automata.F}),
+        body: JSON.stringify({
+          regex_string: automata.regex_string, name: automata.name, Q: automata.Q, Sigma: automata.Sigma,
+          Delta: automata.Delta, q0: automata.q0, F: automata.F,
+          weightFunction: weightFunctionIndex ? weightFunctionIndex : 0
+        }),
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -169,6 +199,19 @@ export const AutomataEntry: React.FC<AutomataEntryProps> = ({
     }
   };
 
+
+  const filteredOptions = weightFunctions.filter(option =>
+    option.toLowerCase().includes(filter.toLowerCase())
+  );
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value);
+    if (weightFunctions.includes(e.target.value)) {
+      console.log(weightFunctions.indexOf(e.target.value));
+      setWeightFunctionIndex(weightFunctions.indexOf(e.target.value));
+      console.log(weightFunctionIndex);
+    }
+  };
+  
   return (
     <li
       style={{
@@ -192,6 +235,36 @@ export const AutomataEntry: React.FC<AutomataEntryProps> = ({
          <button className="button" onClick={openDetailsWindow}>
           Details
         </button>
+        {automata.name.includes("is edit") ?  (
+       <div>
+       <button onClick={toggleMenu}>
+         {isOpen ? 'Close Options' : 'Open Options'}
+       </button>
+       {isOpen && (
+         <div className="menu">
+           <input
+             type="text"
+             value={filter}
+             onChange={handleFilterChange}
+             placeholder="Search options..."
+             className="menu-filter"
+           />
+           <ul className="menu-list">
+             {filteredOptions.length > 0 ? (
+               filteredOptions.map((option, index) => (
+                 <li key={index} onClick={() => handleOptionClick(option)} className="menu-item">
+                   {option}
+                 </li>
+               ))
+             ) : (
+               <li>No options available</li>
+             )}
+           </ul>
+         </div>
+       )}
+       {selectedOption && <p>Selected: {selectedOption}</p>}
+     </div>
+        ): null}
         {automata.name.includes("omega") && automata.name.includes("is edit") ?  (
         <button className="button" onClick={omega_inf_inf}>
         ωNED
