@@ -27,10 +27,10 @@ const WeightFunctionModal: React.FC<WeightFunctionModalProps> = ({ onClose, onSa
 
     const handleWeightValueChange = (key: string, value: string) => {
         console.log(value);
-    setWeightValues((prev) => ({
+        setWeightValues((prev) => ({
       ...prev,
       [key]: value,
-    }));
+        }));
     };
     
 

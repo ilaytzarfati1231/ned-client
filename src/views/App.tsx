@@ -29,27 +29,79 @@ const App: React.FC = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   
-  const addAutomataRegex = () => {
+  const addAutomataRegex = async() => {
     if (newAutomataStr.trim() !== "") {
-      const newAutomata: Automata = {
-        regex_string: newAutomataStr,
-        Q: [],
-        Sigma: [],
-        Delta: [],
-        q0: "",
-        F: [],
-        name: newAutomataStr,
-      };
-      setAutomatas([...automatas, newAutomata]);
-      setNewAutomataStr("");
-      setName("");
-    }
+      try {
+        const newAutomata: Automata = {
+          regex_string: newAutomataStr,
+          Q: [],
+          Sigma: [],
+          Delta: [],
+          q0: "",
+          F: [],
+          name: newAutomataStr,
+        };
+        console.log("newAutomata: ", newAutomata);
+        const response = await fetch(`${API_URL}/add-automata`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newAutomata),
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log(data);
+        try {
+          const response = await fetch(`${API_URL}/get-automata`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: newAutomataStr,
+            }),
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log(data);
+          const firstAutomataData = data.first;
+          if (firstAutomataData) {
+            newAutomata.Q = firstAutomataData.states;
+            newAutomata.Sigma = firstAutomataData.symbols;
+            newAutomata.Delta = firstAutomataData.transitions;
+            newAutomata.q0 = firstAutomataData.initial_states;
+            newAutomata.F = firstAutomataData.final_states;
+          }
+          
+        }
+        catch (error) {
+          console.error("Error fetching data:", error);
+        }
+          
+        setAutomatas([...automatas, newAutomata]);
+        setNewAutomataStr("");
+        setName("");
+        setQ([""]);
+        setSigma([""]);
+        setDelta([""]);
+        setQ0("");
+        setF([""]);
+      } catch (e) {
+        console.log(e);
+      }
+  } 
+
   };
 
   const addAutomataDict = () => {
     if (Q.length && Sigma.length && Delta.length && q0 && F.length) {
       const newAutomata: Automata = {
-        regex_string: "",
+        regex_string: name,
         Q,
         Sigma,
         Delta,
@@ -132,6 +184,9 @@ const App: React.FC = () => {
       
       const lines = JSON.parse(fileContent);
       lines.forEach((line: string) => {
+        if (line.startsWith("/")){
+          return;
+        }
         const [name, Q, Sigma, Delta, q0, F] = line.split(";");
         console.log(name, Q, Sigma, Delta, q0, F);
         
